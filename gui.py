@@ -11,6 +11,7 @@ class MusicPickerGUI:
     def __init__(self, translator, music_processor):
         self.translator = translator
         self.music_processor = music_processor
+        self.metadata_processor = None  # 将通过外部设置
         self.root = None
         self.widgets = {}
         self.browse_buttons = []
@@ -38,7 +39,7 @@ class MusicPickerGUI:
         self.root.grid_columnconfigure(0, weight=1)
         
         # 配置主框架权重 - 对称布局
-        self.main_frame.grid_rowconfigure(6, weight=1)  # 日志区域可扩展
+        self.main_frame.grid_rowconfigure(7, weight=1)  # 日志区域可扩展
         self.main_frame.grid_columnconfigure(1, weight=3)  # 中间列权重更大
         self.main_frame.grid_columnconfigure(0, weight=1)  # 左列固定宽度
         self.main_frame.grid_columnconfigure(2, weight=1)  # 右列固定宽度
@@ -64,6 +65,9 @@ class MusicPickerGUI:
         # 中部：文件选择区域
         self._create_file_selection_area()
         
+        # 元数据匹配选项
+        self._create_metadata_options()
+        
         # 按钮区域
         self._create_button_area()
         
@@ -87,7 +91,7 @@ class MusicPickerGUI:
         # 歌曲列表文件
         self.widgets['song_list_label'] = tk.Label(
             self.main_frame,
-            font=FONTS['main'],  # 改为使用main字体，与右边一致
+            font=FONTS['main'],
             fg=COLORS['text_normal'],
             bg=COLORS['bg_main'],
             anchor='w'
@@ -116,7 +120,7 @@ class MusicPickerGUI:
         # 音乐库路径
         self.widgets['music_lib_label'] = tk.Label(
             self.main_frame,
-            font=FONTS['main'],  # 改为使用main字体，与右边一致
+            font=FONTS['main'],
             fg=COLORS['text_normal'],
             bg=COLORS['bg_main'],
             anchor='w'
@@ -145,7 +149,7 @@ class MusicPickerGUI:
         # 输出文件夹路径
         self.widgets['output_dir_label'] = tk.Label(
             self.main_frame,
-            font=FONTS['main'],  # 改为使用main字体，与右边一致
+            font=FONTS['main'],
             fg=COLORS['text_normal'],
             bg=COLORS['bg_main'],
             anchor='w'
@@ -171,11 +175,61 @@ class MusicPickerGUI:
         browse_btn3.grid(row=3, column=2, padx=ENTRY_PADDING, pady=ENTRY_PADDING, sticky="ew")
         self.browse_buttons.append(browse_btn3)
     
+    def _create_metadata_options(self):
+        """创建元数据匹配选项"""
+        # 创建元数据选项框架
+        metadata_frame = tk.Frame(self.main_frame, bg=COLORS['bg_main'])
+        metadata_frame.grid(row=4, column=0, columnspan=3, pady=10, sticky="ew")
+        
+        # 元数据匹配复选框
+        self.use_metadata_var = tk.BooleanVar()
+        self.widgets['metadata_checkbox'] = tk.Checkbutton(
+            metadata_frame,
+            variable=self.use_metadata_var,
+            command=self._on_metadata_option_changed,
+            font=FONTS['main'],
+            bg=COLORS['bg_main'],
+            fg=COLORS['text_normal'],
+            selectcolor=COLORS['bg_main'],
+            activebackground=COLORS['bg_main'],
+            activeforeground=COLORS['text_normal']
+        )
+        self.widgets['metadata_checkbox'].pack(side=tk.LEFT, padx=(ENTRY_PADDING, 5))
+        
+        # 说明文字
+        self.widgets['metadata_help_label'] = tk.Label(
+            metadata_frame,
+            font=FONTS['main'],
+            fg='gray',
+            bg=COLORS['bg_main'],
+            anchor='w'
+        )
+        self.widgets['metadata_help_label'].pack(side=tk.LEFT, padx=(0, ENTRY_PADDING))
+    
+    def _on_metadata_option_changed(self):
+        """元数据选项改变时的回调"""
+        use_metadata = self.use_metadata_var.get()
+        if hasattr(self, 'music_processor') and self.music_processor:
+            self.music_processor.set_use_metadata_matching(use_metadata)
+            
+        # 显示提示信息
+        if use_metadata:
+            if hasattr(self, 'metadata_processor') and self.metadata_processor and not self.metadata_processor.is_metadata_available():
+                messagebox.showwarning(
+                    "警告",
+                    "元数据功能需要安装mutagen库。请运行: pip install mutagen"
+                )
+                self.use_metadata_var.set(False)
+            else:
+                self.log_message("已启用元数据匹配模式")
+        else:
+            self.log_message("已切换到文件名匹配模式")
+    
     def _create_button_area(self):
         """创建按钮区域 - 居中对称"""
         # 创建按钮容器框架
         button_container = tk.Frame(self.main_frame, bg=COLORS['bg_main'])
-        button_container.grid(row=4, column=0, columnspan=3, pady=20, sticky="ew")
+        button_container.grid(row=5, column=0, columnspan=3, pady=20, sticky="ew")
         button_container.grid_columnconfigure(0, weight=1)
         button_container.grid_columnconfigure(1, weight=0)
         button_container.grid_columnconfigure(2, weight=0)
@@ -212,24 +266,24 @@ class MusicPickerGUI:
         """创建日志区域 - 统一字体"""
         # 日志标题和进度的容器
         log_header = tk.Frame(self.main_frame, bg=COLORS['bg_main'])
-        log_header.grid(row=5, column=0, columnspan=3, padx=ENTRY_PADDING, pady=(15, 5), sticky="ew")
+        log_header.grid(row=6, column=0, columnspan=3, padx=ENTRY_PADDING, pady=(15, 5), sticky="ew")
         log_header.grid_columnconfigure(0, weight=1)
         log_header.grid_columnconfigure(1, weight=1)
         
-        # 日志标签（左边）- 使用main字体统一大小
+        # 日志标签（左边）
         self.widgets['log_label'] = tk.Label(
             log_header,
-            font=FONTS['main'],  # 改为使用main字体，与其他标签一致
+            font=FONTS['main'],
             fg=COLORS['text_normal'],
             bg=COLORS['bg_main'],
             anchor='w'
         )
         self.widgets['log_label'].grid(row=0, column=0, sticky="w")
         
-        # 进度标签（右边）- 使用main字体统一大小
+        # 进度标签（右边）
         self.widgets['progress_label'] = tk.Label(
             log_header, 
-            font=FONTS['main'],  # 改为使用main字体，与其他文字一致
+            font=FONTS['main'],
             fg=COLORS['text_normal'],
             bg=COLORS['bg_main'],
             anchor='e'
@@ -240,7 +294,7 @@ class MusicPickerGUI:
         self.widgets['log_area'] = scrolledtext.ScrolledText(
             self.main_frame, 
             wrap=tk.WORD, 
-            font=FONTS['log'],  # 日志区域保持等宽字体，但大小与main一致
+            font=FONTS['log'],
             bg='white',
             fg=COLORS['text_normal'],
             relief='solid',
@@ -248,7 +302,7 @@ class MusicPickerGUI:
             selectbackground='#3399ff',
             selectforeground='white'
         )
-        self.widgets['log_area'].grid(row=6, column=0, columnspan=3, padx=ENTRY_PADDING, pady=(0, ENTRY_PADDING), sticky="nsew")
+        self.widgets['log_area'].grid(row=7, column=0, columnspan=3, padx=ENTRY_PADDING, pady=(0, ENTRY_PADDING), sticky="nsew")
     
     def _select_file(self, entry_widget):
         """选择文件"""
@@ -368,6 +422,10 @@ class MusicPickerGUI:
         self.widgets['music_lib_label'].config(text=self.translator.t('music_library_label'))
         self.widgets['output_dir_label'].config(text=self.translator.t('output_folder_label'))
         self.widgets['log_label'].config(text=self.translator.t('log_label'))
+        
+        # 更新元数据选项
+        self.widgets['metadata_checkbox'].config(text=self.translator.t('use_metadata_matching'))
+        self.widgets['metadata_help_label'].config(text=self.translator.t('metadata_help_text'))
         
         # 更新按钮
         for browse_btn in self.browse_buttons:

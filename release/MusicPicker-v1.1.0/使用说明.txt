@@ -1,0 +1,30 @@
+# MusicPicker 快速启动指南
+
+## 🚀 立即开始
+
+1. **双击 MusicPicker.exe 启动程序**
+
+2. **准备歌曲列表**
+   - 参考 "示例list.txt" 创建你的歌曲列表
+   - 或者使用 GoMusic (https://music.unmeta.cn) 快速生成
+
+3. **选择路径**
+   - 歌曲列表: 你的 .txt 文件
+   - 音乐库: 包含音乐文件的文件夹
+   - 输出文件夹: 复制文件的目标位置
+
+4. **开始处理**
+   - 点击"开始筛选复制"
+   - 查看实时进度和日志
+
+## 📖 详细说明
+
+请查看 "发布说明.md" 获取完整的使用指南。
+
+## 🐛 问题反馈
+
+- GitHub: https://github.com/username/MusicPicker/issues
+- 邮箱: your-email@example.com
+
+---
+MusicPicker v1.1.0 | 2025年06月01日

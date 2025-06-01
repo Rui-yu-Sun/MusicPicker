@@ -21,11 +21,15 @@ class Translator:
                 'output_folder_label': '输出文件夹路径:',
                 'log_label': '日志:',
                 'progress_label': '进度: N/A',
-                
-                # 按钮文本
+                  # 按钮文本
                 'browse_button': '浏览...',
                 'start_button': '开始筛选复制',
                 'stop_button': '停止',
+                
+                # 元数据匹配选项
+                'use_metadata_matching': '使用元数据匹配（推荐）',
+                'metadata_help_text': '基于歌曲标签信息进行匹配，准确度更高',
+                'warning': '警告',
                 
                 # 对话框标题
                 'select_song_list': '选择歌曲列表文件',
@@ -75,11 +79,15 @@ class Translator:
                 'output_folder_label': 'Output Folder Path:',
                 'log_label': 'Log:',
                 'progress_label': 'Progress: N/A',
-                
-                # Button texts
+                  # Button texts
                 'browse_button': 'Browse...',
                 'start_button': 'Start Processing',
                 'stop_button': 'Stop',
+                
+                # Metadata matching options
+                'use_metadata_matching': 'Use Metadata Matching (Recommended)',
+                'metadata_help_text': 'Match based on song tag information for higher accuracy',
+                'warning': 'Warning',
                 
                 # Dialog titles
                 'select_song_list': 'Select Song List File',

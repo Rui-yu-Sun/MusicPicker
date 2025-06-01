@@ -4,5 +4,8 @@
 # os - 文件系统操作
 # shutil - 文件复制操作
 
+# 元数据处理依赖
+mutagen>=1.46.0
+
 # 如果需要打包为 exe 文件
 pyinstaller>=5.0

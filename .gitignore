@@ -25,6 +25,10 @@ MANIFEST
 *.manifest
 # *.spec  # 如果需要保留 spec 文件用于重复构建
 
+# 构建输出目录
+dist/
+build/
+
 # 临时文件
 *.tmp
 *.temp
@@ -97,6 +101,21 @@ build_temp/
 
 # 特定的发布包（可选择性忽略）
 # MusicPicker-v*.zip
+
+# 项目文档（如果是临时生成的）
+项目完成报告.md
+项目交付总结.md
+开发日志.md
+
+# 元数据处理相关临时文件
+metadata_cache/
+.metadata_cache
+*.metadata
+
+# 用户测试文件
+test_list.txt
+my_music_list.txt
+personal_*.txt
 
 # PyInstaller 生成的 spec 文件（如果是自动生成的）
 # *.spec

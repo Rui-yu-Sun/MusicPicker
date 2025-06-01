@@ -5,7 +5,7 @@ import tkinter as tk
 
 # 应用程序信息
 APP_NAME = "MusicPicker"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
 APP_TITLE = "Music Picker"
 
 # 窗口配置
@@ -14,6 +14,11 @@ WINDOW_MIN_SIZE = (750, 550)
 
 # 支持的音频格式
 SUPPORTED_AUDIO_FORMATS = ('.mp3', '.flac', '.wav', '.m4a', '.aac', '.ogg')
+
+# 元数据匹配相关配置
+METADATA_SIMILARITY_THRESHOLD = 0.8  # 元数据匹配相似度阈值
+METADATA_TITLE_WEIGHT = 0.7           # 标题权重
+METADATA_ARTIST_WEIGHT = 0.3          # 艺术家权重
 
 # 日志配置
 LOG_FILE = 'music_picker.log'

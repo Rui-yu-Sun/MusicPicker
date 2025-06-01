@@ -13,6 +13,19 @@ class MusicProcessor:
         self.log_callback = log_callback
         self.is_running = False
         self.logger = logging.getLogger(__name__)
+        self.metadata_processor = None  # 将通过外部设置
+        self.use_metadata_matching = False  # 是否使用元数据匹配
+    
+    def set_metadata_processor(self, metadata_processor):
+        """设置元数据处理器"""
+        self.metadata_processor = metadata_processor
+    
+    def set_use_metadata_matching(self, use_metadata: bool):
+        """设置是否使用元数据匹配"""
+        self.use_metadata_matching = use_metadata
+        if use_metadata and self.metadata_processor and not self.metadata_processor.is_metadata_available():
+            self._log_message("警告: 元数据功能不可用，将使用文件名匹配", 'warning')
+            self.use_metadata_matching = False
     
     def _log_message(self, message, level='info'):
         """同时记录到GUI和日志文件"""
@@ -127,7 +140,24 @@ class MusicProcessor:
             if song_status[song_info['original_line']]:
                 continue
 
-            if song_info['title'] in filename_no_ext and song_info['artist'] in filename_no_ext:
+            # 根据设置选择匹配方式
+            is_match = False
+            if self.use_metadata_matching and self.metadata_processor:
+                # 使用元数据匹配
+                metadata = self.metadata_processor.extract_metadata(file_path)
+                if metadata:
+                    is_match = self.metadata_processor.match_song_by_metadata(song_info, metadata)
+                    if is_match:
+                        self._log_message(f"元数据匹配: {song_info['original_line']} -> {filename}")
+            
+            # 如果元数据匹配失败或未启用，则使用文件名匹配
+            if not is_match:
+                if song_info['title'] in filename_no_ext and song_info['artist'] in filename_no_ext:
+                    is_match = True
+                    if self.use_metadata_matching:
+                        self._log_message(f"文件名匹配: {song_info['original_line']} -> {filename}")
+
+            if is_match:
                 destination_path = os.path.join(output_path, filename)
                 try:
                     if os.path.exists(destination_path):
