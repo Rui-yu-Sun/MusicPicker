@@ -6,7 +6,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+# dist/  # 对于发布项目，可能需要保留 dist/ 中的 exe 文件
 downloads/
 eggs/
 .eggs/
@@ -23,26 +23,89 @@ MANIFEST
 
 # PyInstaller
 *.manifest
-*.spec
+# *.spec  # 如果需要保留 spec 文件用于重复构建
 
-# ��ʱ�ļ�
+# 临时文件
 *.tmp
 *.temp
 
-# �����ļ�
+# 测试文件
 test_music/
 test_output/
+sample_music/
+example_output/
 
-# �༭��
+# 日志文件
+*.log
+music_picker.log
+music_filter.log
+
+# 配置文件（如果包含敏感信息）
+config.ini
+settings.json
+user_config.json
+
+# 示例和测试数据
+示例文件.txt
+sample_*.txt
+test_*.txt
+
+# 编辑器
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# Windows
+# Windows 特定
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+*.lnk
 
-# macOS
+# macOS 特定
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux 特定
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# 项目特定的输出文件
+output/
+copied_music/
+filtered_music/
+
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# 压缩文件（如果不需要版本控制）
+# *.zip  # 发布包可能需要版本控制
+*.rar
+*.7z
+*.tar.gz
+
+# 发布相关临时文件
+release_temp/
+build_temp/
+
+# 特定的发布包（可选择性忽略）
+# MusicPicker-v*.zip
+
+# PyInstaller 生成的 spec 文件（如果是自动生成的）
+# *.spec
+
+# 开发和测试临时文件
+test_*.py
+temp_*.py
+debug_*.py
+
+# 用户生成的示例文件
+user_*.txt
+my_*.txt
