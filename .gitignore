@@ -122,6 +122,7 @@ personal_*.txt
 
 # 开发和测试临时文件
 test_*.py
+!tests/test_playlist_generator.py
 temp_*.py
 debug_*.py
 
