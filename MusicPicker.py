@@ -12,7 +12,8 @@ from utils import setup_logging
 
 
 def main():
-    """主函数"""    # 设置日志
+    """主函数"""
+    # 设置日志
     setup_logging()
     # 初始化翻译器
     translator = Translator()
