@@ -9,7 +9,7 @@ APP_VERSION = "1.2.0"
 APP_TITLE = "Music Picker"
 
 # 窗口配置
-WINDOW_GEOMETRY = "1280x960"  # 默认窗口大小
+WINDOW_GEOMETRY = "1280x1024"  # 默认窗口大小
 WINDOW_MIN_SIZE = (850, 650)  # 增加最小窗口尺寸，确保所有内容可见
 
 # 支持的音频格式
