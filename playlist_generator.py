@@ -35,12 +35,14 @@ class PlaylistGenerator:
         """默认日志输出"""
         self.logger.info(message)
 
-    def scan_music_folder(self, folder_path: str) -> List[str]:
+    def scan_music_folder(self, folder_path: str,
+                          include_subdirs: bool = True) -> List[str]:
         """
         扫描文件夹中的音乐文件
 
         Args:
             folder_path: 音乐文件夹路径
+            include_subdirs: 是否包含子目录
 
         Returns:
             音乐文件路径列表
@@ -51,11 +53,19 @@ class PlaylistGenerator:
 
         music_files = []
         try:
-            for root, dirs, files in os.walk(folder_path):
-                for file in files:
-                    if any(file.lower().endswith(ext)
-                           for ext in SUPPORTED_AUDIO_FORMATS):
-                        file_path = os.path.join(root, file)
+            if include_subdirs:
+                for root, dirs, files in os.walk(folder_path):
+                    for file in files:
+                        if any(file.lower().endswith(ext)
+                               for ext in SUPPORTED_AUDIO_FORMATS):
+                            file_path = os.path.join(root, file)
+                            music_files.append(file_path)
+            else:
+                for file in os.listdir(folder_path):
+                    file_path = os.path.join(folder_path, file)
+                    if (os.path.isfile(file_path) and
+                            any(file.lower().endswith(ext)
+                                for ext in SUPPORTED_AUDIO_FORMATS)):
                         music_files.append(file_path)
 
             self.log_callback(f"扫描完成，找到 {len(music_files)} 个音乐文件")
@@ -138,7 +148,8 @@ class PlaylistGenerator:
             return False
 
         self.log_callback(f"开始扫描文件夹: {folder_path}")
-        music_files = self.scan_music_folder(folder_path)
+        music_files = self.scan_music_folder(
+            folder_path, include_subdirs=include_subdirs)
 
         if not music_files:
             self.log_callback("文件夹中没有找到音乐文件")
