@@ -124,6 +124,7 @@ personal_*.txt
 test_*.py
 temp_*.py
 debug_*.py
+!tests/**
 
 # 用户生成的示例文件
 user_*.txt
